@@ -1,0 +1,5 @@
+sqlite3
+.open ydb.db;
+create table worker (id int, name text);
+insert into worker values (1, 'Alexandra');
+.save ydb.db
