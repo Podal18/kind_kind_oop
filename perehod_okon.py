@@ -1,39 +1,65 @@
 import sys
+from dataclasses import dataclass
 from turtledemo.clock import setup
+import pymysql
+from pymysql import MySQLError
+from PySide6.QtWidgets import QWidget, QApplication, QMessageBox
+from mysql.connector import connect
 
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox
-from qq import Ui_Form as MainMenu
-from untitled import Ui_Form as WelcomeForm
-class MainApplication:
+from untitled import Ui_Form as MainMenu
+from qq import Ui_Form as WelcomeMani
+
+class WW:
     def __init__(self):
         self.app = QApplication(sys.argv)
 
         self.menu = QWidget()
-        self.welcome = QWidget()
+        self.wlcm = QWidget()
 
-        self.main_menu = MainMenu()
-        self.main_menu.setupUi(self.menu)
+
+        self.menu_widget = MainMenu()
+        self.menu_widget.setupUi(self.menu)
         self.menu.resize(500, 500)
 
-        self.wlc = WelcomeForm()
-        self.wlc.setupUi(self.welcome)
+        self.welcome_witget = WelcomeMani()
+        self.welcome_witget.setupUi(self.wlcm)
 
-        self.ass()
+        self.realiz()
 
-    def ass(self):
-        self.wlc.pushButton.clicked.connect(self.z)
-        self.wlc.pushButton_2.clicked.connect(self.vihod)
+        self.db_connection = self.df_cnct()
+        self.db_cursor = self.db_connection.cursor()
+
+    def df_cnct(self):
+        try:
+            connection = pymysql.connect(
+                host="localhost",
+                user="root",
+                password="root",  # Убедитесь, что добавлен пароль
+                database="staff_schedule",
+                charset="utf8mb4"
+            )
+
+            print("norm")
+            return connection
+        except MySQLError as e:
+            print(e)
+            sys.exit()
+
+    def realiz(self):
+        self.welcome_witget.pushButton.clicked.connect(self.z)
+        self.welcome_witget.pushButton_2.clicked.connect(self.vhd)
 
     def z(self):
         self.menu.show()
 
-    def vihod(self):
+    def vhd(self):
+        self.db_connection.close()
         sys.exit()
 
     def run(self):
-        self.welcome.show()
+        self.wlcm.show()
         sys.exit(self.app.exec())
 
 if __name__ == "__main__":
-    app = MainApplication()
+    app = WW()
     app.run()
